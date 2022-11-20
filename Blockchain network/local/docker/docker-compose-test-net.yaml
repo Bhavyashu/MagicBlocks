@@ -1,0 +1,831 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: "2.4"
+
+volumes:
+  orderer1:
+  orderer2:
+  orderer3:
+  peer0.landowner:
+  peer1.landowner:
+  peer2.landowner:
+  peer3.landowner:
+  peer4.landowner:
+  peer5.landowner:
+  peer0.landbuyer:
+  peer1.landbuyer:
+  peer2.landbuyer:
+  peer3.landbuyer:
+  peer4.landbuyer:
+  peer5.landbuyer:
+  peer0.blockgaurdians:
+  peer1.blockgaurdians:
+  peer2.blockgaurdians:
+  peer3.blockgaurdians:
+  peer4.blockgaurdians:
+  peer5.blockgaurdians:
+  peer0.insurance:
+  peer1.insurance:
+  peer2.insurance:
+  peer3.insurance:
+  peer4.insurance:
+  peer5.insurance:
+  peer0.government:
+  peer1.government:
+  peer2.government:
+  peer3.government:
+  peer4.government:
+  peer5.government:
+
+networks:
+  PropertyBecho:
+    name: fabric_test
+
+services:
+  orderer1:
+    container_name: orderer1
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=1100
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=orderer1-MSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:11100
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../organizations/ordererOrganizations/orderer1/config.orderers/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer1/config.orderers/tls/:/var/hyperledger/orderer/tls
+      - orderer1:/var/hyperledger/production/orderer
+    ports:
+      - 1100:1100
+      - 11100:11100
+    networks:
+      - PropertyBecho
+
+  orderer2:
+    container_name: orderer2
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=1101
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=orderer2-MSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:11101
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../organizations/ordererOrganizations/orderer2/config.orderers/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer2/config.orderers/tls/:/var/hyperledger/orderer/tls
+      - orderer2:/var/hyperledger/production/orderer
+    ports:
+      - 1101:1101
+      - 11101:11101
+    networks:
+      - PropertyBecho
+
+  orderer3:
+    container_name: orderer3
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    environment:
+      - FABRIC_LOGGING_SPEC=INFO
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_LISTENPORT=1102
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=orderer3-MSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:11102
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+      - ORDERER_KAFKA_VERBOSE=true
+      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+      - ../system-genesis-block/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+      - ../organizations/ordererOrganizations/orderer3/config.orderers/msp:/var/hyperledger/orderer/msp
+      - ../organizations/ordererOrganizations/orderer3/config.orderers/tls/:/var/hyperledger/orderer/tls
+      - orderer3:/var/hyperledger/production/orderer
+    ports:
+      - 1102:1102
+      - 11102:11102
+    networks:
+      - PropertyBecho
+
+  peer0.landowner:
+    container_name: peer0.landowner
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.landowner
+      - CORE_PEER_ADDRESS=peer0.landowner:4444
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4444
+      - CORE_PEER_CHAINCODEADDRESS=peer0.landowner:4445
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4445
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.landowner:4444
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.landowner:4444
+      - CORE_PEER_LOCALMSPID=landownermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:14444
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:4446
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landowner/peers/peer0.landowner/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landowner/peers/peer0.landowner/tls:/etc/hyperledger/fabric/tls
+      - peer0.landowner:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 4444:4444
+      - 14444:14444
+    networks:
+      - PropertyBecho
+
+  peer1.landowner:
+    container_name: peer1.landowner
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer1.landowner
+      - CORE_PEER_ADDRESS=peer1.landowner:4454
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4454
+      - CORE_PEER_CHAINCODEADDRESS=peer1.landowner:4455
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4455
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.landowner:4454
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.landowner:4454
+      - CORE_PEER_LOCALMSPID=landownermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:14454
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:4456
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landowner/peers/peer1.landowner/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landowner/peers/peer1.landowner/tls:/etc/hyperledger/fabric/tls
+      - peer1.landowner:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 4454:4454
+      - 14454:14454
+    networks:
+      - PropertyBecho
+
+  peer2.landowner:
+    container_name: peer2.landowner
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer2.landowner
+      - CORE_PEER_ADDRESS=peer2.landowner:4464
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4464
+      - CORE_PEER_CHAINCODEADDRESS=peer2.landowner:4465
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4465
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.landowner:4464
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.landowner:4464
+      - CORE_PEER_LOCALMSPID=landownermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:14464
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:4466
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landowner/peers/peer2.landowner/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landowner/peers/peer2.landowner/tls:/etc/hyperledger/fabric/tls
+      - peer2.landowner:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 4464:4464
+      - 14464:14464
+    networks:
+      - PropertyBecho
+
+  peer3.landowner:
+    container_name: peer3.landowner
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer3.landowner
+      - CORE_PEER_ADDRESS=peer3.landowner:4474
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4474
+      - CORE_PEER_CHAINCODEADDRESS=peer3.landowner:4475
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4475
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.landowner:4474
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.landowner:4474
+      - CORE_PEER_LOCALMSPID=landownermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:14474
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:4476
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landowner/peers/peer3.landowner/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landowner/peers/peer3.landowner/tls:/etc/hyperledger/fabric/tls
+      - peer3.landowner:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 4474:4474
+      - 14474:14474
+    networks:
+      - PropertyBecho
+
+  peer4.landowner:
+    container_name: peer4.landowner
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer4.landowner
+      - CORE_PEER_ADDRESS=peer4.landowner:4484
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4484
+      - CORE_PEER_CHAINCODEADDRESS=peer4.landowner:4485
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4485
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer4.landowner:4484
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4.landowner:4484
+      - CORE_PEER_LOCALMSPID=landownermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:14484
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:4486
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landowner/peers/peer4.landowner/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landowner/peers/peer4.landowner/tls:/etc/hyperledger/fabric/tls
+      - peer4.landowner:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 4484:4484
+      - 14484:14484
+    networks:
+      - PropertyBecho
+
+  peer5.landowner:
+    container_name: peer5.landowner
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer5.landowner
+      - CORE_PEER_ADDRESS=peer5.landowner:4494
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:4494
+      - CORE_PEER_CHAINCODEADDRESS=peer5.landowner:4495
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:4495
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer5.landowner:4494
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer5.landowner:4494
+      - CORE_PEER_LOCALMSPID=landownermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:14494
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:4496
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landowner/peers/peer5.landowner/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landowner/peers/peer5.landowner/tls:/etc/hyperledger/fabric/tls
+      - peer5.landowner:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 4494:4494
+      - 14494:14494
+    networks:
+      - PropertyBecho
+
+  peer0.landbuyer:
+    container_name: peer0.landbuyer
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.landbuyer
+      - CORE_PEER_ADDRESS=peer0.landbuyer:5555
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:5555
+      - CORE_PEER_CHAINCODEADDRESS=peer0.landbuyer:5556
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:5556
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.landbuyer:5555
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.landbuyer:5555
+      - CORE_PEER_LOCALMSPID=landbuyermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:15555
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:5557
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landbuyer/peers/peer0.landbuyer/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landbuyer/peers/peer0.landbuyer/tls:/etc/hyperledger/fabric/tls
+      - peer0.landbuyer:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 5555:5555
+      - 15555:15555
+    networks:
+      - PropertyBecho
+
+  peer1.landbuyer:
+    container_name: peer1.landbuyer
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer1.landbuyer
+      - CORE_PEER_ADDRESS=peer1.landbuyer:5565
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:5565
+      - CORE_PEER_CHAINCODEADDRESS=peer1.landbuyer:5566
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:5566
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.landbuyer:5565
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.landbuyer:5565
+      - CORE_PEER_LOCALMSPID=landbuyermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:15565
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:5567
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landbuyer/peers/peer1.landbuyer/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landbuyer/peers/peer1.landbuyer/tls:/etc/hyperledger/fabric/tls
+      - peer1.landbuyer:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 5565:5565
+      - 15565:15565
+    networks:
+      - PropertyBecho
+
+  peer2.landbuyer:
+    container_name: peer2.landbuyer
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer2.landbuyer
+      - CORE_PEER_ADDRESS=peer2.landbuyer:5575
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:5575
+      - CORE_PEER_CHAINCODEADDRESS=peer2.landbuyer:5576
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:5576
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.landbuyer:5575
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.landbuyer:5575
+      - CORE_PEER_LOCALMSPID=landbuyermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:15575
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:5577
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landbuyer/peers/peer2.landbuyer/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landbuyer/peers/peer2.landbuyer/tls:/etc/hyperledger/fabric/tls
+      - peer2.landbuyer:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 5575:5575
+      - 15575:15575
+    networks:
+      - PropertyBecho
+
+  peer3.landbuyer:
+    container_name: peer3.landbuyer
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer3.landbuyer
+      - CORE_PEER_ADDRESS=peer3.landbuyer:5585
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:5585
+      - CORE_PEER_CHAINCODEADDRESS=peer3.landbuyer:5586
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:5586
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.landbuyer:5585
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.landbuyer:5585
+      - CORE_PEER_LOCALMSPID=landbuyermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:15585
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:5587
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landbuyer/peers/peer3.landbuyer/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landbuyer/peers/peer3.landbuyer/tls:/etc/hyperledger/fabric/tls
+      - peer3.landbuyer:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 5585:5585
+      - 15585:15585
+    networks:
+      - PropertyBecho
+
+  peer4.landbuyer:
+    container_name: peer4.landbuyer
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer4.landbuyer
+      - CORE_PEER_ADDRESS=peer4.landbuyer:5595
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:5595
+      - CORE_PEER_CHAINCODEADDRESS=peer4.landbuyer:5596
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:5596
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer4.landbuyer:5595
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4.landbuyer:5595
+      - CORE_PEER_LOCALMSPID=landbuyermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:15595
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:5597
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landbuyer/peers/peer4.landbuyer/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landbuyer/peers/peer4.landbuyer/tls:/etc/hyperledger/fabric/tls
+      - peer4.landbuyer:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 5595:5595
+      - 15595:15595
+    networks:
+      - PropertyBecho
+
+  peer5.landbuyer:
+    container_name: peer5.landbuyer
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer5.landbuyer
+      - CORE_PEER_ADDRESS=peer5.landbuyer:5605
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:5605
+      - CORE_PEER_CHAINCODEADDRESS=peer5.landbuyer:5606
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:5606
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer5.landbuyer:5605
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer5.landbuyer:5605
+      - CORE_PEER_LOCALMSPID=landbuyermsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:15605
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:5607
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/landbuyer/peers/peer5.landbuyer/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/landbuyer/peers/peer5.landbuyer/tls:/etc/hyperledger/fabric/tls
+      - peer5.landbuyer:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 5605:5605
+      - 15605:15605
+    networks:
+      - PropertyBecho
+
+  peer0.blockgaurdians:
+    container_name: peer0.blockgaurdians
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer0.blockgaurdians
+      - CORE_PEER_ADDRESS=peer0.blockgaurdians:6666
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:6666
+      - CORE_PEER_CHAINCODEADDRESS=peer0.blockgaurdians:6667
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:6667
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.blockgaurdians:6666
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.blockgaurdians:6666
+      - CORE_PEER_LOCALMSPID=blockgaurdiansmsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:16666
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:6668
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer0.blockgaurdians/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer0.blockgaurdians/tls:/etc/hyperledger/fabric/tls
+      - peer0.blockgaurdians:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 6666:6666
+      - 16666:16666
+    networks:
+      - PropertyBecho
+
+  peer1.blockgaurdians:
+    container_name: peer1.blockgaurdians
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer1.blockgaurdians
+      - CORE_PEER_ADDRESS=peer1.blockgaurdians:6676
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:6676
+      - CORE_PEER_CHAINCODEADDRESS=peer1.blockgaurdians:6677
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:6677
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.blockgaurdians:6676
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.blockgaurdians:6676
+      - CORE_PEER_LOCALMSPID=blockgaurdiansmsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:16676
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:6678
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer1.blockgaurdians/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer1.blockgaurdians/tls:/etc/hyperledger/fabric/tls
+      - peer1.blockgaurdians:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 6676:6676
+      - 16676:16676
+    networks:
+      - PropertyBecho
+
+  peer2.blockgaurdians:
+    container_name: peer2.blockgaurdians
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer2.blockgaurdians
+      - CORE_PEER_ADDRESS=peer2.blockgaurdians:6686
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:6686
+      - CORE_PEER_CHAINCODEADDRESS=peer2.blockgaurdians:6687
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:6687
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer2.blockgaurdians:6686
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.blockgaurdians:6686
+      - CORE_PEER_LOCALMSPID=blockgaurdiansmsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:16686
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:6688
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer2.blockgaurdians/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer2.blockgaurdians/tls:/etc/hyperledger/fabric/tls
+      - peer2.blockgaurdians:/var/hyperledger/production
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    ports:
+      - 6686:6686
+      - 16686:16686
+    networks:
+      - PropertyBecho
+
+  peer3.blockgaurdians:
+    container_name: peer3.blockgaurdians
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    environment:
+      #Generic peer variables
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=PropertyBecho
+      - FABRIC_LOGGING_SPEC=INFO
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      # Peer specific variabes
+      - CORE_PEER_ID=peer3.blockgaurdians
+      - CORE_PEER_ADDRESS=peer3.blockgaurdians:6696
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:6696
+      - CORE_PEER_CHAINCODEADDRESS=peer3.blockgaurdians:6697
+      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:6697
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer3.blockgaurdians:6696
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.blockgaurdians:6696
+      - CORE_PEER_LOCALMSPID=blockgaurdiansmsp
+      - CORE_OPERATIONS_LISTENADDRESS=0.0.0.0:16696
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=12s
+      - CORE_PEER_EVENTS_ADDRESS=0.0.0.0:6698
+    volumes:
+      - /var/run/docker.sock:/host/var/run/docker.sock
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer3.blockgaurdians/msp:/etc/hyperledger/fabric/msp
+      - ../organizations/peerOrganizations/blockgaurdians/peers/peer3.blockgaurdians/tls:/etc/hyperledger/fabric/tls
